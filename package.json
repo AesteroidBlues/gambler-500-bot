@@ -1,0 +1,16 @@
+{
+  "name": "gambler-bot",
+  "version": "1.0.0",
+  "description": "A Discord bot for searching for Gambler 500 cars on Cragislist",
+  "main": "souce/App.ts",
+  "scripts": {
+    "build": "tsc source/App.ts"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "discord-bot": "^0.2.16",
+    "node-craigslist": "^1.2.2",
+    "typescript": "^3.0.1"
+  }
+}
