@@ -12,19 +12,23 @@ let keywords = [
 ]
 
 function main() {
-    let client = new Discord.Client();
-    client.login(process.env.DISCORD_TOKEN);
-    client.on('ready', () => {
-        console.log(`Logged in as ${client.user.tag}!`);
-    });
+    // let client = new Discord.Client();
+    // client.login(process.env.DISCORD_TOKEN);
+    // client.on('ready', () => {
+    //     console.log(`Logged in as ${client.user.tag}!`);
+    // });
 
-    client.on('message', message => {
-        if (message.content == "!list") {
-            message.channel.send("Lookin' for a good deal");
-            performSearch().then((resultLink) => {
-                message.channel.send("Catch a riiiiide!'\n" + resultLink);
-            })
-        }
+    // client.on('message', message => {
+    //     if (message.content == "!list") {
+    //         message.channel.send("Lookin' for a good deal");
+    //         performSearch().then((resultLink) => {
+    //             message.channel.send("Catch a riiiiide!'\n" + resultLink);
+    //         })
+    //     }
+    // });
+
+    performSearch().then((url) => {
+        console.log(url);
     });
 }
 
@@ -85,6 +89,9 @@ function performSearch() {
                 TinyURL.shorten(url, (shortUrl) => {
                     resolve(shortUrl);
                 });
+            })
+            .catch((reason) => {
+                console.log(reason);
             });
     });
 }
