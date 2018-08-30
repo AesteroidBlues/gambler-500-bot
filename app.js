@@ -2,34 +2,52 @@ const Discord = require('discord.js');
 const Craigslist = require('node-craigslist');
 const Lzma = require('lzma');
 const TinyURL = require('tinyurl');
+const CronJob = require('node-cron');
 
-let keywords = [
+const keywords = [
     'isuzu',
     'jeep',
     'subaru',
     '4wd', '4x4', '4 wheel drive', 'awd', 'all wheel drive',
     '4runner', '4 runner'
-]
+];
+
+const greetings = [
+    "You'll never take me alive you robotic sumbitch!"
+];
+
+const findAnnouncement = [
+    "Catch a riiiiiiiide!"
+];
 
 function main() {
-    // let client = new Discord.Client();
-    // client.login(process.env.DISCORD_TOKEN);
-    // client.on('ready', () => {
-    //     console.log(`Logged in as ${client.user.tag}!`);
-    // });
+    let client = new Discord.Client();
+    client.login(process.env.DISCORD_TOKEN);
+    client.on('ready', () => {
+        console.log(`Logged in as ${client.user.tag}!`);
+        let channel = client.channels.find(ch => ch.name === "the-junkyard");
+        if (!channel) {
+            console.log("Unable to find #the-junkyard");
+            return;
+        }
 
-    // client.on('message', message => {
-    //     if (message.content == "!list") {
-    //         message.channel.send("Lookin' for a good deal");
-    //         performSearch().then((resultLink) => {
-    //             message.channel.send("Catch a riiiiide!'\n" + resultLink);
-    //         })
-    //     }
-    // });
-
-    performSearch().then((url) => {
-        console.log(url);
+        channel.send(random(greetings));
     });
+
+    let task = CronJob.schedule('0 0 11 * * * *', () => {
+        performSearch().then((resultLink) => {
+            let channel = client.channels.find(ch => ch.name === "the-junkyard");
+            if (!channel) {
+                console.log("Unable to find #the-junkyard");
+                return;
+            }
+            channel.send(`${random(findAnnouncement)}\n ${resultLink}`);
+        });
+    }, true);
+}
+
+function random(arr) {
+    return arr[Math.floor(Math.random() * arr.length)];
 }
 
 function performSearch() {
